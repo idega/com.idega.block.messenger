@@ -10,58 +10,9 @@
             <value>
               <map>
                 <key>
-                  <name>component_name</name>
+                  <name>component_property_file</name>
                   <type>java.lang.String</type>
-                  <value>Messenger</value>
-                </key>
-                <key>
-                  <name>component_type</name>
-                  <type>java.lang.String</type>
-                  <value>iw.block</value>
-                </key>
-                <key>
-                  <name>iw_component_methods</name>
-                  <value>
-                    <map>
-                      <key>
-                        <name>:method:1:implied:void:setWidth:java.lang.String:</name>
-                        <value>
-                          <map>
-                            <key>
-                              <name>iw_method_identifier</name>
-                              <type>java.lang.String</type>
-                              <value>:method:1:implied:void:setWidth:java.lang.String:</value>
-                            </key>
-                            <key>
-                              <name>iw_method_description</name>
-                              <type>java.lang.String</type>
-                              <value>Width</value>
-                            </key>
-                          </map>
-                        </value>
-                        <type>map</type>
-                      </key>
-                      <key>
-                        <name>:method:1:implied:void:setHeigth:java.lang.String:</name>
-                        <value>
-                          <map>
-                            <key>
-                              <name>iw_method_identifier</name>
-                              <type>java.lang.String</type>
-                              <value>:method:1:implied:void:setHeigth:java.lang.String:</value>
-                            </key>
-                            <key>
-                              <name>iw_method_description</name>
-                              <type>java.lang.String</type>
-                              <value>Height</value>
-                            </key>
-                          </map>
-                        </value>
-                        <type>map</type>
-                      </key>
-                    </map>
-                  </value>
-                  <type>map</type>
+                  <value>com.idega.block.messenger.presentation.Messenger.pxml</value>
                 </key>
               </map>
             </value>
