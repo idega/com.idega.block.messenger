@@ -38,7 +38,7 @@ public class ClientSessionBinder implements HttpSessionBindingListener {
     ClientManager cManager = (ClientManager) app.getAttribute("ClientManager");
     if( cManager!=null ){
       System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
-      System.out.println("ClientSessionBinder : logging off client :"+cManager.getClientName(session.getId()));
+      System.out.println("ClientSessionBinder : logging off client :"+ClientManager.getClientName(session.getId()));
       System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
       cManager.clientCheckOut(session.getId());
     }

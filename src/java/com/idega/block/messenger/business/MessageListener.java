@@ -30,7 +30,7 @@ public class MessageListener implements Runnable{
     while(runThread){
       try {
         if( listener!=null ) listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"iw-cycle"));
-        t.sleep(threadSleep);
+        Thread.sleep(threadSleep);
       }
       catch (Exception e) {
         e.printStackTrace(System.out);
@@ -42,7 +42,7 @@ public class MessageListener implements Runnable{
     runThread = true;
     if( t == null ){
       t = new Thread(this,"MessageListener thread");
-      t.setPriority(t.MIN_PRIORITY);
+      t.setPriority(Thread.MIN_PRIORITY);
       t.start();
     }
   }
