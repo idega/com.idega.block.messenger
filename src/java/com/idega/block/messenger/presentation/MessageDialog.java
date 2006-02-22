@@ -216,8 +216,4 @@ public class MessageDialog extends Frame implements ActionListener{
       listener = AWTEventMulticaster.remove(listener, l);
   }
 
-  private ActionListener getActionListener(){
-    return listener;
-  }
-
 }

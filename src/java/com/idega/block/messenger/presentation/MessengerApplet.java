@@ -48,7 +48,6 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
   private static String SERVLET_URL = "servlet_url";
   private static String SERVER_ROOT_URL = "server_root_url";
-  private static String RESOURCE_URL = "resource_url";
   private static String LOG_OUT = "log_out";
   private boolean loggingOff = false;
 
@@ -59,16 +58,11 @@ public class MessengerApplet extends Applet implements  ActionListener{
   private String userListVersion = "v.0";
   private String servletURL;
   private URL hostURL;
-  private String resourceURL;
 
   private Hashtable dialogs = new Hashtable();
   private MessageListener cycler;
 
   private AudioClip alertSound;
-
-  private String keyPressed=null;
-  //private Image offscreenImage;
-  //private Graphics offscr;
 
   private long checkTimer = 3000;
 
@@ -90,7 +84,6 @@ public class MessengerApplet extends Applet implements  ActionListener{
       userName = this.getParameter(USER_NAME, "Anonymous");
       servletURL = this.getParameter(SERVLET_URL, "servlet/ClientServer");
       hostURL = new URL(this.getParameter(SERVER_ROOT_URL, getCodeBase().getProtocol()+"://"+getCodeBase().getHost()+":"+getCodeBase().getPort()));
-      resourceURL = this.getParameter(RESOURCE_URL,"/idegaweb/bundles/com.idega.block.messenger.bundle/resources/");
 
       if(cycler==null){
         cycler = new MessageListener(checkTimer);
@@ -374,14 +367,6 @@ public class MessengerApplet extends Applet implements  ActionListener{
     processPacket();
 
     conn = null;
-  }
-
-  private Packet getPacketToServlet(){
-    return this.packetToServlet;
-  }
-
-  private Packet getPacketFromServlet(){
-    return this.packetFromServlet;
   }
 
   public synchronized void actionPerformed(ActionEvent e){

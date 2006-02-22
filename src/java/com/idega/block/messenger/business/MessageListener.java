@@ -71,8 +71,4 @@ public class MessageListener implements Runnable{
     listener = AWTEventMulticaster.remove(listener, l);
   }
 
-  private ActionListener getActionListener(){
-    return listener;
-  }
-
 }
