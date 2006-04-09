@@ -79,16 +79,16 @@ public class MessengerApplet extends Applet implements  ActionListener{
   /**Initialize the applet*/
   public void init() {
     try {
-      sessionId = this.getParameter(SESSION_ID, "noId");
-      userId = this.getParameter(USER_ID, "-1");
-      userName = this.getParameter(USER_NAME, "Anonymous");
-      servletURL = this.getParameter(SERVLET_URL, "servlet/ClientServer");
-      hostURL = new URL(this.getParameter(SERVER_ROOT_URL, getCodeBase().getProtocol()+"://"+getCodeBase().getHost()+":"+getCodeBase().getPort()));
+      this.sessionId = this.getParameter(SESSION_ID, "noId");
+      this.userId = this.getParameter(USER_ID, "-1");
+      this.userName = this.getParameter(USER_NAME, "Anonymous");
+      this.servletURL = this.getParameter(SERVLET_URL, "servlet/ClientServer");
+      this.hostURL = new URL(this.getParameter(SERVER_ROOT_URL, getCodeBase().getProtocol()+"://"+getCodeBase().getHost()+":"+getCodeBase().getPort()));
 
-      if(cycler==null){
-        cycler = new MessageListener(checkTimer);
-        cycler.addActionListener(this);
-        cycler.start();
+      if(this.cycler==null){
+        this.cycler = new MessageListener(this.checkTimer);
+        this.cycler.addActionListener(this);
+        this.cycler.start();
       }
 
     }
@@ -98,7 +98,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
     }
 
     setBackground(Color.white);
-    alertSound = getAudioClip(getCodeBase(),"notify.au");
+    this.alertSound = getAudioClip(getCodeBase(),"notify.au");
 
   }
 
@@ -113,7 +113,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
     while (enumer.hasMoreElements()){
       aMessage = (Message) enumer.nextElement();
-      MessageDialog messageDialog = (MessageDialog) dialogs.get(Integer.toString(aMessage.getId()));
+      MessageDialog messageDialog = (MessageDialog) this.dialogs.get(Integer.toString(aMessage.getId()));
       if( messageDialog == null ) { //create a new dialog
         messageDialog = createAMessageDialog(false,aMessage);
       }
@@ -131,31 +131,39 @@ public class MessengerApplet extends Applet implements  ActionListener{
     messageDialog.setLocation((d.width - messageDialog.getSize().width) / 2, (d.height - messageDialog.getSize().height) / 2);
     messageDialog.setSize(FRAME_WIDTH,FRAME_HEIGHT);
     messageDialog.addActionListener(this);
-    if( alertSound!=null ) messageDialog.setAudioClip(alertSound);
-    else System.out.println("alert is null");
+    if( this.alertSound!=null ) {
+			messageDialog.setAudioClip(this.alertSound);
+		}
+		else {
+			System.out.println("alert is null");
+		}
 
-    if( newId ) dialogs.put(Integer.toString(messageDialog.hashCode()),messageDialog);
-    else dialogs.put(Integer.toString(aMessage.getId()),messageDialog);
+    if( newId ) {
+			this.dialogs.put(Integer.toString(messageDialog.hashCode()),messageDialog);
+		}
+		else {
+			this.dialogs.put(Integer.toString(aMessage.getId()),messageDialog);
+		}
 
     return messageDialog;
   }
 
 
   private synchronized void getMessagesFromDialog(MessageDialog dialog){//gets called on and iw-send event action
-    if( packetToServlet == null ){
-      packetToServlet = new Packet();
+    if( this.packetToServlet == null ){
+      this.packetToServlet = new Packet();
     }
-    packetToServlet.setSender(sessionId);
+    this.packetToServlet.setSender(this.sessionId);
 
     Vector msg = dialog.getMessages();
     int length = msg.size();
     for (int i = 0; i < length; i++) {
-      ((Message)msg.elementAt(i)).setSender(sessionId);
+      ((Message)msg.elementAt(i)).setSender(this.sessionId);
     }
 
 
     /**@todo make this work for many dialogs..*/
-    packetToServlet.addMessages(msg);
+    this.packetToServlet.addMessages(msg);
     dialog.clearMessageVector();
     cycle();
   }
@@ -168,7 +176,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
     try{
         // connect to the servlet
         System.out.println("Connecting to servlet...");
-        URL servlet = new URL(hostURL,servletURL);
+        URL servlet = new URL(this.hostURL,this.servletURL);
 
         servletConnection = servlet.openConnection();
         System.out.println("Connected");
@@ -199,19 +207,21 @@ public class MessengerApplet extends Applet implements  ActionListener{
   private void sendPacket(URLConnection conn){
     ObjectOutputStream outputToServlet = null;
     try{
-        if( packetToServlet == null) packetToServlet = new Packet();
+        if( this.packetToServlet == null) {
+					this.packetToServlet = new Packet();
+				}
 
-        if( !loggingOff ){
-          packetToServlet.addProperty(new Property(SESSION_ID,sessionId));
-          packetToServlet.addProperty(new Property(USER_ID,userId));
-          packetToServlet.addProperty(new Property(USER_LIST_VERSION,userListVersion));
-          packetToServlet.setSender(sessionId);
+        if( !this.loggingOff ){
+          this.packetToServlet.addProperty(new Property(SESSION_ID,this.sessionId));
+          this.packetToServlet.addProperty(new Property(USER_ID,this.userId));
+          this.packetToServlet.addProperty(new Property(USER_LIST_VERSION,this.userListVersion));
+          this.packetToServlet.setSender(this.sessionId);
         }
 
         System.out.println("sending packets");
         outputToServlet = new ObjectOutputStream(conn.getOutputStream());
         // serialize the object
-        outputToServlet.writeObject(packetToServlet);
+        outputToServlet.writeObject(this.packetToServlet);
 
         outputToServlet.flush();
         outputToServlet.close();
@@ -231,7 +241,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
      *
      */
     private void receivePacket(URLConnection conn){
-      packetFromServlet = null;
+      this.packetFromServlet = null;
       ObjectInputStream theInputFromServlet = null;
       try{
         System.out.println("receiving packets");
@@ -239,7 +249,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
           theInputFromServlet = new ObjectInputStream(conn.getInputStream());
             // read the serialized Packet from the servlet
           System.out.println("Reading data...");
-          packetFromServlet = (Packet) theInputFromServlet.readObject();
+          this.packetFromServlet = (Packet) theInputFromServlet.readObject();
           theInputFromServlet.close();
           System.out.println("Finished reading data.");
 
@@ -259,15 +269,17 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
     System.out.println("processing the packet ...");
 
-    if( packetFromServlet!=null ){
-      packetFromServlet.process(this);
+    if( this.packetFromServlet!=null ){
+      this.packetFromServlet.process(this);
 
       //Message stuff
-      Vector messages = packetFromServlet.getMessages();
-      if( messages!= null) dispatchMessagesToDialogs(messages);
+      Vector messages = this.packetFromServlet.getMessages();
+      if( messages!= null) {
+				dispatchMessagesToDialogs(messages);
+			}
 
       //Property stuff userlists etc.
-      Vector props = packetFromServlet.getProperties();
+      Vector props = this.packetFromServlet.getProperties();
       Vector userlist = null;
 
       if( props!=null ){
@@ -281,7 +293,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
             }
           }
           else if (((Property)props.elementAt(i)).getKey().equals(USER_LIST_VERSION) ){
-           userListVersion = (String)((Property)props.elementAt(i)).getValue();
+           this.userListVersion = (String)((Property)props.elementAt(i)).getValue();
           }
         }
       }
@@ -293,7 +305,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
     refresh();
 
-    packetToServlet = null;
+    this.packetToServlet = null;
 
 
   }
@@ -305,7 +317,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
    for (int k = 0; k < length; k++) {
     Property user = (Property)userlist.elementAt(k);
     String id = user.getKey();
-    if( !id.equalsIgnoreCase(sessionId) ){
+    if( !id.equalsIgnoreCase(this.sessionId) ){
          addToUserList( id , (String)user.getValue() );//new user
     }
        refresh();
@@ -315,7 +327,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
 
 
-    System.out.println("MessengerApplet: userListVersion : "+userListVersion);
+    System.out.println("MessengerApplet: userListVersion : "+this.userListVersion);
   }
 
   private void addToUserList(String sendToId, String name){
@@ -324,7 +336,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
       Message msg = new Message();
       msg.setSender(sendToId);
       msg.setSenderName(name);
-      msg.setRecipientName(userName);
+      msg.setRecipientName(this.userName);
 
       MessageDialog dialog = createAMessageDialog(true,msg);
 
@@ -396,15 +408,15 @@ public class MessengerApplet extends Applet implements  ActionListener{
   public void stop() {
     logOff();
 
-    if(cycler!=null){
-     cycler.stop();
+    if(this.cycler!=null){
+     this.cycler.stop();
     }
   }
 
   protected void logOff(){
-    packetToServlet = new Packet();
-    packetToServlet.addProperty(new Property(LOG_OUT,sessionId));
-    loggingOff = true;
+    this.packetToServlet = new Packet();
+    this.packetToServlet.addProperty(new Property(LOG_OUT,this.sessionId));
+    this.loggingOff = true;
     sendPacket(getURLConnection());
   }
 
@@ -418,12 +430,12 @@ public class MessengerApplet extends Applet implements  ActionListener{
         g = null;
     }
 
-    if(cycler!=null){
-     cycler.destroy();
+    if(this.cycler!=null){
+     this.cycler.destroy();
     }
 
-    dialogs.clear();
-    dialogs=null;
+    this.dialogs.clear();
+    this.dialogs=null;
 /**@todo travers through hashtable and do this
       messageDialog.setVisible(false);
       messageDialog.cancel();

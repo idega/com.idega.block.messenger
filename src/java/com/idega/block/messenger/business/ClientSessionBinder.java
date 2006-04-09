@@ -35,7 +35,7 @@ public class ClientSessionBinder implements HttpSessionBindingListener {
    */
   public void valueUnbound(HttpSessionBindingEvent e) {
     HttpSession session = e.getSession();
-    ClientManager cManager = (ClientManager) app.getAttribute("ClientManager");
+    ClientManager cManager = (ClientManager) this.app.getAttribute("ClientManager");
     if( cManager!=null ){
       System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
       System.out.println("ClientSessionBinder : logging off client :"+ClientManager.getClientName(session.getId()));

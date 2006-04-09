@@ -39,7 +39,7 @@ public class ClientManager implements PacketManager{
       ClientManager.clients.put(sessionId,user);
       removeDoubleRegistry(sessionId,userId);
       ClientManager.reverseClients.put(userId,sessionId);
-      version++;
+      this.version++;
     }
     catch(SQLException e){
       e.printStackTrace(System.err);
@@ -58,7 +58,7 @@ public class ClientManager implements PacketManager{
     catch(Exception e){
       e.printStackTrace();
     }
-    version++;
+    this.version++;
 
   }
 
@@ -67,7 +67,9 @@ public class ClientManager implements PacketManager{
     if( user!=null ){
       return user.getName();
     }
-    else return null;
+		else {
+			return null;
+		}
   }
 
   public synchronized void processPacket(Packet packet){
@@ -128,7 +130,7 @@ public class ClientManager implements PacketManager{
   }
 
   public String getUserListVersion(){
-   return (PREFIX+version);
+   return (PREFIX+this.version);
   }
 
   public static Vector getConnectedClients(String sessionId){
