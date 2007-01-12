@@ -48,6 +48,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
 
   private static String SERVLET_URL = "servlet_url";
   private static String SERVER_ROOT_URL = "server_root_url";
+  private static String RESOURCE_URL = "resource_url";
   private static String LOG_OUT = "log_out";
   private boolean loggingOff = false;
 
@@ -58,11 +59,16 @@ public class MessengerApplet extends Applet implements  ActionListener{
   private String userListVersion = "v.0";
   private String servletURL;
   private URL hostURL;
+  private String resourceURL;
 
   private Hashtable dialogs = new Hashtable();
   private MessageListener cycler;
 
   private AudioClip alertSound;
+
+  private String keyPressed=null;
+  //private Image offscreenImage;
+  //private Graphics offscr;
 
   private long checkTimer = 3000;
 
@@ -84,6 +90,7 @@ public class MessengerApplet extends Applet implements  ActionListener{
       this.userName = this.getParameter(USER_NAME, "Anonymous");
       this.servletURL = this.getParameter(SERVLET_URL, "servlet/ClientServer");
       this.hostURL = new URL(this.getParameter(SERVER_ROOT_URL, getCodeBase().getProtocol()+"://"+getCodeBase().getHost()+":"+getCodeBase().getPort()));
+      this.resourceURL = this.getParameter(RESOURCE_URL,"/idegaweb/bundles/com.idega.block.messenger.bundle/resources/");
 
       if(this.cycler==null){
         this.cycler = new MessageListener(this.checkTimer);
@@ -132,18 +139,18 @@ public class MessengerApplet extends Applet implements  ActionListener{
     messageDialog.setSize(FRAME_WIDTH,FRAME_HEIGHT);
     messageDialog.addActionListener(this);
     if( this.alertSound!=null ) {
-			messageDialog.setAudioClip(this.alertSound);
-		}
-		else {
-			System.out.println("alert is null");
-		}
+		messageDialog.setAudioClip(this.alertSound);
+	}
+	else {
+		System.out.println("alert is null");
+	}
 
     if( newId ) {
-			this.dialogs.put(Integer.toString(messageDialog.hashCode()),messageDialog);
-		}
-		else {
-			this.dialogs.put(Integer.toString(aMessage.getId()),messageDialog);
-		}
+		this.dialogs.put(Integer.toString(messageDialog.hashCode()),messageDialog);
+	}
+	else {
+		this.dialogs.put(Integer.toString(aMessage.getId()),messageDialog);
+	}
 
     return messageDialog;
   }
@@ -208,8 +215,8 @@ public class MessengerApplet extends Applet implements  ActionListener{
     ObjectOutputStream outputToServlet = null;
     try{
         if( this.packetToServlet == null) {
-					this.packetToServlet = new Packet();
-				}
+			this.packetToServlet = new Packet();
+		}
 
         if( !this.loggingOff ){
           this.packetToServlet.addProperty(new Property(SESSION_ID,this.sessionId));
@@ -275,8 +282,8 @@ public class MessengerApplet extends Applet implements  ActionListener{
       //Message stuff
       Vector messages = this.packetFromServlet.getMessages();
       if( messages!= null) {
-				dispatchMessagesToDialogs(messages);
-			}
+		dispatchMessagesToDialogs(messages);
+	}
 
       //Property stuff userlists etc.
       Vector props = this.packetFromServlet.getProperties();
@@ -379,6 +386,14 @@ public class MessengerApplet extends Applet implements  ActionListener{
     processPacket();
 
     conn = null;
+  }
+
+  private Packet getPacketToServlet(){
+    return this.packetToServlet;
+  }
+
+  private Packet getPacketFromServlet(){
+    return this.packetFromServlet;
   }
 
   public synchronized void actionPerformed(ActionEvent e){

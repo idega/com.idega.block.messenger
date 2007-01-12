@@ -67,9 +67,9 @@ public class ClientManager implements PacketManager{
     if( user!=null ){
       return user.getName();
     }
-		else {
-			return null;
-		}
+	else {
+		return null;
+	}
   }
 
   public synchronized void processPacket(Packet packet){

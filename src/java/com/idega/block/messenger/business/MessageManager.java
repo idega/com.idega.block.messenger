@@ -119,9 +119,9 @@ public class MessageManager implements PacketManager{
           recipientName = ClientManager.getClientName(msg.getRecipient());
 
           if ( recipientName != null ) {
-						msg.setRecipientName(recipientName);
-					}
-					else {
+			msg.setRecipientName(recipientName);
+		}
+		else {
 
             msg.setRecipientName("Unknown recipient");
 

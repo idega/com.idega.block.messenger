@@ -30,8 +30,8 @@ public class MessageListener implements Runnable{
     while(this.runThread){
       try {
         if( this.listener!=null ) {
-					this.listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"iw-cycle"));
-				}
+			this.listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"iw-cycle"));
+		}
         Thread.sleep(this.threadSleep);
       }
       catch (Exception e) {
@@ -71,6 +71,10 @@ public class MessageListener implements Runnable{
 
   public void removeActionListener(ActionListener l) {
     this.listener = AWTEventMulticaster.remove(this.listener, l);
+  }
+
+  private ActionListener getActionListener(){
+    return this.listener;
   }
 
 }

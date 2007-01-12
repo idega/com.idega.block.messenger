@@ -132,8 +132,8 @@ public class MessageDialog extends Frame implements ActionListener{
         this.replyMessage.requestFocus();
 
         if( this.listener!=null ) {
-					this.listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"iw-send"));
-				}
+			this.listener.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,"iw-send"));
+		}
 
         }
   }
@@ -145,8 +145,8 @@ public class MessageDialog extends Frame implements ActionListener{
     this.messageArea.append(this.message.getSenderName()+" says:\n");
     this.messageArea.append("   "+this.message.getMessage()+"\n");
     if(this.alertSound!=null) {
-			this.alertSound.play();
-		}
+		this.alertSound.play();
+	}
         //setStatus("Last message received at "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds());
         repaint();
 
@@ -163,8 +163,8 @@ public class MessageDialog extends Frame implements ActionListener{
 
   private void storeMessageString(){
     if( this.messageVector == null ) {
-			this.messageVector = new Vector();
-		}
+		this.messageVector = new Vector();
+	}
     Message msg = new Message();
     msg.setMessage(this.lastMessageString);
     msg.setRecipient(this.message.getSender());
@@ -220,6 +220,10 @@ public class MessageDialog extends Frame implements ActionListener{
 
   public void removeActionListener(ActionListener l) {
       this.listener = AWTEventMulticaster.remove(this.listener, l);
+  }
+
+  private ActionListener getActionListener(){
+    return this.listener;
   }
 
 }
